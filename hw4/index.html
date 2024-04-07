@@ -1,7 +1,157 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Homework 4 index.html here
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Mesh Editor</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+
+<body>
+
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2024</h1>
+<h1 align="middle">Project 4: Cloth Simulator</h1>
+<h2 align="middle">Tiffany Sun, April 6, 2024</h2>
+
+<br><br>
+
+<div>
+
+<h2 align="middle">Overview</h2>
+<p>cloth :o</p>
+
+<h2 align="middle">Part I: Masses and springs</h2>
+<p> screenshots of scene/pinned2.json </p>
+<img src="pics/1-1.png" width="50%">
+<p>  (1) without any shearing constraints </p>
+<img src="pics/1-2.png" width="50%">
+<p>  (2) with shearing constraints </p>
+<img src="pics/1-3.png" width="50%">
+<p> (3) all constraints</p>
+<img src="pics/1-1.png" width="50%">
+
+<h2 align="middle">Part II: Simulation via numerical integration</h2>
+<p> A higher value of 'ks' results in a stiffer cloth, as the springs connecting the cloth's particles resist deformation more strongly. Conversely, a lower 'ks' value leads to a more flexible and fluid-like cloth, as the springs offer less resistance to changes in shape. However, extremely high or low 'ks' values can lead to unstable simulations, as the cloth may oscillate rapidly or stretch excessively. Therefore, choosing an appropriate 'ks' value is crucial for achieving realistic cloth behavior.</p>
+<p> higher value of 'ks' </p>
+<img src="pics/2-3.png" width="50%">
+<p> lower value of 'ks' </p>
+<img src="pics/2-2.png" width="50%">
+<p>A higher density means more mass per unit area, which results in a heavier cloth. This increased weight can lead to more pronounced sagging and slower movements due to the greater force of gravity. On the other hand, a cloth with lower density will be lighter and more susceptible to forces like wind, leading to more dynamic and swift movements. However, a very low density might make the cloth behave more like a gas than a solid material. </p>
+<p> higher density </p>
+<img src="pics/2-5.png" width="50%">
+<p> lower density </p>
+<img src="pics/2-6.png" width="50%">
+<p> Damping refers to the reduction of motion over time, often due to friction or resistance. In the context of cloth simulation, a higher damping value will cause the cloth to settle more quickly and resist rapid movements, leading to a more stable but less dynamic simulation. Conversely, a lower damping value allows for more energetic and lively cloth movement, but can also lead to instability or unrealistic oscillations.</p>
+<p> higher damping </p>
+<img src="pics/2-8.png" width="50%">
+<p> lower damping </p>
+<img src="pics/2-7.png" width="50%">
+<p> scene/pinned4.json </p>
+<img src="pics/2-1.png" width="50%">
+
+<h2> Part III: Handling collisions with other objects </h2>
+
+<h3 align="middle">Default ks = 5000</h3>
+<img src="pics/3-1.png" width="50%">
+<p>With the default ks value of 5000, the cloth drapes over the sphere in a balanced manner, showing a realistic behavior of cloth.</p>
+
+<h3 align="middle">ks = 500</h3>
+<img src="pics/3-3.png" width="50%">
+<p>With a lower ks value of 500, the cloth appears more flexible and less resistant to deformation, leading to a more draped and fluid-like appearance.</p>
+
+<h3 align="middle">ks = 50000</h3>
+<img src="pics/3-2.png" width="50%">
+<p>With a higher ks value of 50000, the cloth appears stiffer and more resistant to deformation. It holds its shape more rigidly and shows less draping over the sphere.</p>
+
+<p> peaceful cloths</p>
+<img src="pics/peaceful-cloth-1.png" width="50%">
+<img src="pics/peaceful-cloth.png" width="50%">
+
+<h2> Part IV: Handling self-collisions </h2>
+<p> cloth self-collision</p>
+<img src="pics/4-1.png" width="50%">
+<img src="pics/4-2.png" width="50%">
+<img src="pics/4-3.png" width="50%">
+<img src="pics/4-4.png" width="50%">
+<img src="pics/4-5.png" width="50%">
+
+<p> varying density</p>
+<p> higher density means having more pronounced collisions due to its increased weight</p>
+<img src="pics/4-6.png" width="50%">
+<p> lower density means having less pronounced collisions but responds more dynamically to external forces</p>
+<img src="pics/4-7.png" width="50%">
+
+<p> varying ks </p>
+<p> higher ks means having more rigid appearance due to its increased stiffness</p>
+<img src="pics/4-8.png" width="50%">
+<p> lower ks that the springs offer less resistance to changes in shape and thus a more fluid appearance</p>
+<img src="pics/4-9.png" width="50%">
+</body>
+
+<h2> Part V: Shaders </h2>
+
+<p>Shader programs typically consist of at least two parts: a vertex shader and a fragment shader. These two shaders work together to create the final visual effect.</p>
+
+<p>The vertex shader operates on each vertex of the 3D object. It's responsible for transforming the 3D coordinates of these vertices into the 2D space of the screen. This process often involves operations like translation, rotation, and scaling. The vertex shader can also calculate per-vertex data, such as lighting, that will be used by the fragment shader.</p>
+
+<p>The fragment shader, on the other hand, operates on each pixel that the 3D object occupies on the screen. It uses the data calculated by the vertex shader, along with its own calculations, to determine the final color of each pixel. This is where detailed effects like lighting, shadows, and material textures are typically calculated.</p>
+
+<p>The Blinn-Phong shading model is a method used in computer graphics to calculate the color of a pixel based on its lighting environment and the properties of its material. </p>
+
+<p>The model consists of three components: ambient, diffuse, and specular. The ambient component represents the light that is scattered uniformly in all directions. The diffuse component represents the light that is scattered in many directions due to the roughness of the surface. The specular component represents the light that is reflected in a specific direction, causing shiny highlights on the surface.</p>
+
+<p> only ambient: </p>
+<img src="pics/ambience.png" width="50%">
+<p> only diffuse: </p>
+<img src="pics/diffuse.png" width="50%">
+<p> only specular: </p>
+<img src="pics/specular.png" width="50%">
+<p> all three: </p>
+<img src="pics/all.png" width="50%">
+
+<p> texture mapping shader using my own custom texture:</p>
+<img src="pics/5-texture.png" width="50%">
+<p>Bump mapping is a technique that simulates small-scale detail on surfaces by perturbing the surface normals and does not modify the actual geometry. It gives the illusion of depth on the surface but does not affect the silhouette of the object.</p>
+<p>bump mapping on cloth and sphere: </p>
+<img src="pics/bump-1.png" width="50%">
+<img src="pics/bump-2.png" width="50%">
+<p>Displacement mapping, on the other hand, is a technique that deforms the actual geometry of the object based on a texture. It creates real, tangible detail on the surface of the object and can affect the silhouette.</p>
+<p>displacement mapping on sphere: </p>
+<img src="pics/displacement-1.png" width="50%">
+
+<p>Comparing the two, bump mapping is less computationally expensive but can't provide the same level of realism as displacement mapping, especially when viewed from a sharp angle. Displacement mapping offers more realism but at a higher computational cost.</p>
+
+<h3 align="middle">Coarse Mesh (-o 16 -a 16)</h3>
+<p>With a coarse mesh, the details of the texture are not well represented, and the sphere appears blocky and less realistic.</p>
+<p> bump on -o 16 -a 16: </p>
+<img src="pics/16-bump.png" width="50%">
+<p> displacement on -o 16 -a 16: </p>
+<img src="pics/16-displacement.png" width="50%">
+<h3 align="middle">Fine Mesh (-o 128 -a 128)</h3>
+<p>With a fine mesh, the details of the texture are well represented, and the sphere appears smooth and more realistic.</p>
+<p> bump on -o 128 -a 128: </p>
+<img src="pics/128-bump.png" width="50%">
+<p> displacement on -o 128 -a 128: </p>
+<img src="pics/128-displacement.png" width="50%">
+
+<p> mirror shader on cloth:</p>
+<img src="pics/mirror-cloth.png" width="50%">
+<p> mirror shader on sphere:</p>
+<img src="pics/mirror-sphere.png" width="50%">
+
+
 </html>
